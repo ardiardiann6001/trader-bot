@@ -1,16 +1,22 @@
 {
   "name": "trader-bot",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test-api": "node scripts/test-binance-api.js",
+    "test-api-comprehensive": "npm run test-api",
+    "health-check": "node -e \"const BinanceAPIManager = require('./utils/binanceApi.js'); require('dotenv').config({path: '.env.local'}); const api = new BinanceAPIManager({apiKey: process.env.NEXT_PUBLIC_BINANCE_API_KEY, apiSecret: process.env.NEXT_PUBLIC_BINANCE_API_SECRET, isTestnet: process.env.NEXT_PUBLIC_BINANCE_TESTNET === 'true'}); api.performHealthCheck().then(r => console.log('Health Score:', r.healthScore + '%', 'Status:', r.status));\"",
+    "stress-test": "node -e \"const BinanceAPIManager = require('./utils/binanceApi.js'); require('dotenv').config({path: '.env.local'}); const api = new BinanceAPIManager({apiKey: process.env.NEXT_PUBLIC_BINANCE_API_KEY, apiSecret: process.env.NEXT_PUBLIC_BINANCE_API_SECRET, isTestnet: process.env.NEXT_PUBLIC_BINANCE_TESTNET === 'true'}); api.runStressTest(10, 1000).then(r => console.log('Stress Test Results:', r));\""
   },
   "dependencies": {
     "binance-api-node": "^0.12.9",
     "chart.js": "^4.5.0",
+    "dotenv": "^17.2.1",
     "net": "^1.0.2",
     "next": "15.4.4",
     "react": "19.1.0",
